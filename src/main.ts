@@ -10,6 +10,8 @@ async function bootstrap() {
 
   const config = app.get<AppConfigService>(AppConfigService);
 
+  app.setGlobalPrefix(config.prefix);
+
   await app.listen(config.port);
 
   Logger.log(`App start listening at port: ${config.port}`);
