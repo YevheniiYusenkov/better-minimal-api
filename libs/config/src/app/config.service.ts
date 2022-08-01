@@ -8,4 +8,8 @@ export class AppConfigService {
   get port(): string {
     return this.configService.get<string>('app.port');
   }
+
+  get prefix(): string {
+    return this.configService.get<string>('app.prefix');
+  }
 }
