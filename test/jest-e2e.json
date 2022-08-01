@@ -12,6 +12,8 @@
   },
   "moduleNameMapper": {
     "@app/config/(.*)": "<rootDir>/../libs/config/src/$1",
-    "@app/config": "<rootDir>/../libs/config/src"
+    "@app/config": "<rootDir>/../libs/config/src",
+    "@app/entities/(.*)": "<rootDir>/../libs/entities/src/$1",
+    "@app/entities": "<rootDir>/../libs/entities/src"
   }
 }
