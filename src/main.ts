@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 import { AppConfigService } from '@app/config';
 
@@ -11,6 +11,13 @@ async function bootstrap() {
   const config = app.get<AppConfigService>(AppConfigService);
 
   app.setGlobalPrefix(config.prefix);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidUnknownValues: true,
+    }),
+  );
 
   await app.listen(config.port);
 
