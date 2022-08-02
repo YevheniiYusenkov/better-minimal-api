@@ -3,10 +3,10 @@ import { Type } from 'class-transformer';
 
 export class LoginDto {
   @IsNotEmpty()
-  @Type(() => String)
+  // @Type(() => String)
   username: string;
 
   @IsNotEmpty()
-  @Type(() => String)
+  // @Type(() => String)
   password: string;
 }
