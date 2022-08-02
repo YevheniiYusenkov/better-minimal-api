@@ -6,4 +6,9 @@ export class GetUsersDto {
   @Type(() => Number)
   @IsNumber()
   limit: number;
+
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsNumber()
+  skip: number;
 }
