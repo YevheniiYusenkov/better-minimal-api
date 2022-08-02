@@ -3,6 +3,7 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { GetUsersDto } from './dto/get-users.dto';
 import { UsersService } from './users.service';
+import { GetUserDto } from './dto/get-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -14,12 +15,12 @@ export class UsersController {
   }
 
   @Get()
-  public async users(@Query() params: GetUsersDto) {
-    return await this.service.users(params);
+  public async users(@Query() query: GetUsersDto) {
+    return await this.service.users(query);
   }
 
   @Get(':id')
-  public async user(@Param('id') id: string) {
-    return await this.service.user(id);
+  public async user(@Param() params: GetUserDto) {
+    return await this.service.user(params);
   }
 }
