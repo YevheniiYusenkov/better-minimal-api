@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from '@app/entities';
 
+import { CryptoService } from '../crypto/crypto.service';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { GetUsersDto } from './dto/get-users.dto';
 import { GetUserDto } from './dto/get-user.dto';
@@ -13,16 +15,20 @@ import { GetUserDto } from './dto/get-user.dto';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly repository: Repository<User>,
+    private readonly crypto: CryptoService,
   ) {}
 
   public async create(payload: CreateUserDto) {
     const user = new User();
 
+    payload.password = await this.crypto.hash(payload.password);
+
     this.repository.merge(user, payload);
 
     await this.repository.save(user);
 
-    return user;
+    const { password, ...withoutPassword } = user;
+    return withoutPassword;
   }
 
   public async users(payload: GetUsersDto) {
@@ -33,10 +39,20 @@ export class UsersService {
   }
 
   public async user(payload: GetUserDto) {
-    return await this.repository
-      .createQueryBuilder('user')
-      .where('user.id = :id', { id: payload.id })
-      .addSelect(`user.${payload.addSelect}`)
-      .getOne();
+    const query = this.repository.createQueryBuilder('user');
+
+    if (payload.id) {
+      query.where('user.id = :id', { id: payload.id });
+    }
+
+    if (payload.username) {
+      query.where('user.username = :username', { username: payload.username });
+    }
+
+    if (payload.addSelect) {
+      query.addSelect(`user.${payload.addSelect}`);
+    }
+
+    return await query.getOne();
   }
 }
