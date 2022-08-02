@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
+import { Type } from 'class-transformer';
 
 import { User } from '@app/entities';
 
@@ -7,10 +8,16 @@ type KeysMatching<T, V> = {
 }[keyof T];
 
 export class GetUserDto {
-  @IsNotEmpty()
+  @IsOptional()
+  @Type(() => String)
   @IsUUID()
-  id: string;
+  id?: string;
 
   @IsOptional()
-  addSelect: KeysMatching<User, string>;
+  @Type(() => String)
+  addSelect?: KeysMatching<User, string>;
+
+  @IsOptional()
+  @Type(() => String)
+  username?: string;
 }
