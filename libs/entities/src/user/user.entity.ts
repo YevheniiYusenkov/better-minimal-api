@@ -28,7 +28,7 @@ export class User {
     nullable: true,
     unique: true,
   })
-  email: string;
+  email?: string;
 
   @CreateDateColumn({
     name: 'created_at',
