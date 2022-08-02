@@ -6,6 +6,7 @@ import {
   PostgresConfigModule,
   PostgresConfigService,
 } from '@app/config';
+import { User } from '@app/entities';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -17,17 +18,16 @@ import { UsersModule } from './users/users.module';
   imports: [
     TypeOrmModule.forRootAsync({
       imports: [PostgresConfigModule],
-      useFactory: async (config: PostgresConfigService) => {
-        console.log(config.password);
-        return {
-          type: config.type,
-          host: config.host,
-          port: config.port,
-          username: config.username,
-          password: config.password,
-          database: config.database,
-        };
-      },
+      useFactory: async (config: PostgresConfigService) => ({
+        type: config.type,
+        host: config.host,
+        port: config.port,
+        username: config.username,
+        password: config.password,
+        database: config.database,
+        synchronize: true,
+        entities: [User],
+      }),
       inject: [PostgresConfigService],
     }),
     AppConfigModule,
