@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
+import { User } from '@app/entities';
 
 import { UsersService } from '../users/users.service';
 import { CryptoService } from '../crypto/crypto.service';
 
 import { LoginDto } from './dto/login.dto';
-import { User } from '@app/entities';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly crypto: CryptoService,
+    private readonly jwt: JwtService,
   ) {}
 
   public async validate(payload: LoginDto): Promise<Partial<User>> {
@@ -27,5 +30,12 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  public async generateToken(user: User): Promise<{ token: string }> {
+    const payload = { userId: user.id };
+    const token = this.jwt.sign(payload);
+
+    return { token };
   }
 }
